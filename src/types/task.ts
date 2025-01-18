@@ -1,21 +1,10 @@
-// src/types/task.ts
-export type TaskPriority = "low" | "medium" | "high";
-export type TaskStatus = "todo" | "in-progress" | "completed";
-
 export interface Task {
-  id: string;
+  _id: string;
   title: string;
-  description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  dueDate?: string;
+  description: string;
+  status: "todo" | "in-progress" | "done";
+  dueDate: string;
   tags: string[];
+  createdBy: string;
   attachments?: string[];
-  createdAt: string;
-  updatedAt: string;
-  userId: string;
-  assignedTo?: string;
 }
-
-export interface TaskCreate
-  extends Omit<Task, "id" | "createdAt" | "updatedAt"> {}

@@ -1,62 +1,42 @@
-// src/components/layout/header.tsx
 "use client";
 
-import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Bell, Search } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Avatar } from "@/components/ui/avatar";
+import Link from "next/link";
 
-export default function DashboardHeader() {
-  const { user, logOut } = useAuth();
+export function Header() {
+  const { theme, setTheme } = useTheme();
+  const { user, signOut } = useAuth();
 
   return (
-    <header className="border-b bg-white">
-      <div className="flex h-16 items-center px-4 gap-4">
-        <div className="flex-1">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-            <input
-              type="search"
-              placeholder="Search tasks..."
-              className="w-full max-w-xs pl-8 h-9 rounded-md border border-gray-200"
-            />
-          </div>
-        </div>
-
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-600" />
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-              <Avatar className="h-9 w-9">
-                <AvatarImage
-                  src={user?.photoURL || ""}
-                  alt={user?.displayName || ""}
-                />
-                <AvatarFallback>{user?.displayName?.[0]}</AvatarFallback>
+    <header className="border-b">
+      <div className="flex h-16 items-center px-4 md:px-6">
+        <Link href="/" className="font-bold">
+          Task Manager
+        </Link>
+        <div className="ml-auto flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+          {user && (
+            <>
+              <Avatar>
+                <img src={user.photoURL || ""} alt={user.displayName || ""} />
               </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logOut}>Log out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <Button variant="outline" onClick={signOut}>
+                Sign Out
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

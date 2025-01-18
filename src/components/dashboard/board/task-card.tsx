@@ -1,57 +1,37 @@
-// src/components/dashboard/board/task-card.tsx
 "use client";
 
-import { Draggable } from "@hello-pangea/dnd";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Task } from "@/types/task";
 import { Calendar, Tag } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 
 interface TaskCardProps {
   task: Task;
-  index: number;
 }
 
-export default function TaskCard({ task, index }: TaskCardProps) {
+export function TaskCard({ task }: TaskCardProps) {
   return (
-    <Draggable draggableId={task.id} index={index}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          className={`bg-white rounded-lg shadow p-4 ${
-            snapshot.isDragging ? "shadow-lg" : ""
-          }`}
-        >
-          <h4 className="font-medium text-gray-900 mb-2">{task.title}</h4>
-
-          {task.description && (
-            <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-              {task.description}
-            </p>
-          )}
-
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            {task.dueDate && (
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>
-                  {formatDistanceToNow(new Date(task.dueDate), {
-                    addSuffix: true,
-                  })}
-                </span>
-              </div>
-            )}
-
-            {task.tags.length > 0 && (
-              <div className="flex items-center gap-1">
-                <Tag className="h-4 w-4" />
-                <span>{task.tags.length}</span>
-              </div>
-            )}
+    <Card className="cursor-pointer hover:shadow-md transition-shadow">
+      <CardHeader className="p-4">
+        <CardTitle className="text-base">{task.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 pt-0">
+        <p className="text-sm text-muted-foreground mb-4">{task.description}</p>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Calendar className="h-4 w-4" />
+            {new Date(task.dueDate).toLocaleDateString()}
+          </div>
+          <div className="flex items-center gap-2">
+            <Tag className="h-4 w-4" />
+            {task.tags.map((tag) => (
+              <Badge key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
           </div>
         </div>
-      )}
-    </Draggable>
+      </CardContent>
+    </Card>
   );
 }

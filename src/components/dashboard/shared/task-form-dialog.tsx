@@ -1,49 +1,34 @@
-// src/components/dashboard/shared/task-form-dialog.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+//import { TaskForm } from "./task-form";
 import { Plus } from "lucide-react";
-import { useState } from "react";
-import TaskForm from "./task-form";
-import { Task, TaskCreate } from "@/types/task";
-import { useTasks } from "@/hooks/use-tasks";
 
-interface TaskFormDialogProps {
-  task?: Task;
-  trigger?: React.ReactNode;
-}
-
-export default function TaskFormDialog({ task, trigger }: TaskFormDialogProps) {
-  const [open, setOpen] = useState(false);
-  const { createTask, updateTask } = useTasks();
-
-  const handleSubmit = async (taskData: TaskCreate) => {
-    if (task) {
-      await updateTask({ id: task.id, task: taskData });
-    } else {
-      await createTask(taskData);
-    }
-    setOpen(false);
+export function TaskFormDialog() {
+  const handleSubmit = async (data: any) => {
+    // TODO: Implement task creation/update logic
+    console.log(data);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
-        {trigger || (
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" /> New Task
-          </Button>
-        )}
+        <Button>
+          <Plus className="mr-2 h-4 w-4" /> Add Task
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        {open && (
-          <TaskForm
-            task={task}
-            onSubmit={handleSubmit}
-            onClose={() => setOpen(false)}
-          />
-        )}
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create New Task</DialogTitle>
+        </DialogHeader>
+        {/* <TaskForm onSubmit={handleSubmit} /> */}
       </DialogContent>
     </Dialog>
   );
