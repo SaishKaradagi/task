@@ -1,4 +1,4 @@
-import { AuthProvider } from "../context/authContext";
+import { AuthProvider } from "../context/auth-context";
 import "./globals.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
